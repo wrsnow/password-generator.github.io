@@ -5,16 +5,38 @@ const elements_length = elements.length;
 const TEXTOUT = document.querySelector("#text-output");
 const GENBTN = document.querySelector("#generatebtn");
 const COPYBTN = document.querySelector("#copybtn");
+let password_length;
+
+let regex = /^(?=.*[0-9])(?=.*\W)(?=.*[a-z])(?=.*[A-Z])([a-zA-Z0-9\W]+){8}$/g;
 
 GENBTN.addEventListener("click", () => {
     let output = "";
     TEXTOUT.textContent = "";
-    for (let i = 0; i < 12; i++) {
-        output += elements.charAt(Math.floor(Math.random() * elements_length));
-    }
+    output = GeneratePassword();
     TEXTOUT.textContent = output;
     TEXTOUT.setAttribute("value", output);
 });
+
+const label_range = document.querySelector("#show-number-range");
+const range_number = document.querySelector("#number-range");
+range_number.addEventListener("input", () => {
+    label_range.textContent = parseInt(range_number.value);
+    password_length = parseInt(range_number.value);
+});
+
+function GeneratePassword() {
+    output = "";
+    password_length = parseInt(range_number.value);
+    for (let i = 0; i < password_length; i++) {
+        output += elements.charAt(Math.floor(Math.random() * elements_length));
+    }
+    if (regex.test(output)) {
+        return output;
+    } else {
+        GeneratePassword();
+    }
+    return output;
+}
 
 COPYBTN.addEventListener("click", () => {
     ///Copy btn, only works with input box and a value inside
